@@ -1,14 +1,6 @@
 import * as Crypto from 'expo-crypto';
 import { openDatabaseAsync } from 'expo-sqlite';
-import React, {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { EntryRepository, type NewEntryInput, type SmellEntry } from '../data';
@@ -38,31 +30,29 @@ export function DiaryProvider({ children }: { children: React.ReactNode }) {
   const [repo, setRepo] = useState<EntryRepository | null>(null);
   const [entries, setEntries] = useState<SmellEntry[]>([]);
   const [error, setError] = useState<Error | null>(null);
-  const mounted = useRef(true);
 
   useEffect(() => {
-    mounted.current = true;
+    let cancelled = false;
     (async () => {
       const db = await openDatabaseAsync(DATABASE_NAME);
       await db.execAsync('PRAGMA journal_mode = WAL');
       const r = new EntryRepository(db, { generateId: () => Crypto.randomUUID() });
       await r.init();
       const initial = await r.list();
-      if (!mounted.current) return;
+      if (cancelled) return;
       setEntries(initial);
       setRepo(r);
     })().catch((e: unknown) => {
-      if (mounted.current) setError(e instanceof Error ? e : new Error(String(e)));
+      if (!cancelled) setError(e instanceof Error ? e : new Error(String(e)));
     });
     return () => {
-      mounted.current = false;
+      cancelled = true;
     };
   }, []);
 
   const refresh = useCallback(async () => {
     if (!repo) return;
-    const next = await repo.list();
-    if (mounted.current) setEntries(next);
+    setEntries(await repo.list());
   }, [repo]);
 
   const addEntry = useCallback(

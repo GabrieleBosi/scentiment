@@ -19,7 +19,11 @@ export function EntryCard({ entry, onPress }: EntryCardProps) {
       style={({ pressed }) => [styles.card, pressed && styles.pressed]}
     >
       {entry.photoUri ? (
-        <Image source={{ uri: entry.photoUri }} style={styles.photo} accessibilityIgnoresInvertColors />
+        <Image
+          source={{ uri: entry.photoUri }}
+          style={styles.photo}
+          accessibilityIgnoresInvertColors
+        />
       ) : (
         <View style={[styles.photo, styles.photoPlaceholder]}>
           <Text style={styles.placeholderText}>no photo</Text>

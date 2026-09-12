@@ -132,7 +132,8 @@ export class EntryRepository {
           ? current.smellDescription
           : normalizeDescription(patch.smellDescription),
       tags: patch.tags === undefined ? current.tags : normalizeTags(patch.tags),
-      intensity: patch.intensity === undefined ? current.intensity : normalizeIntensity(patch.intensity),
+      intensity:
+        patch.intensity === undefined ? current.intensity : normalizeIntensity(patch.intensity),
     };
     validateEntry(next);
 
@@ -150,7 +151,10 @@ export class EntryRepository {
   }
 
   async count(): Promise<number> {
-    const row = await this.driver.getFirstAsync<{ n: number }>('SELECT COUNT(*) AS n FROM entries', []);
+    const row = await this.driver.getFirstAsync<{ n: number }>(
+      'SELECT COUNT(*) AS n FROM entries',
+      [],
+    );
     return row?.n ?? 0;
   }
 

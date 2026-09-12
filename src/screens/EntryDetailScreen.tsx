@@ -21,23 +21,31 @@ export function EntryDetailScreen({ route, navigation }: RootScreenProps<'EntryD
   }
 
   function confirmDelete() {
-    Alert.alert('Delete this entry?', 'The photo and the description will be removed from this phone.', [
-      { text: 'Keep it', style: 'cancel' },
-      {
-        text: 'Delete',
-        style: 'destructive',
-        onPress: async () => {
-          await removeEntry(route.params.entryId);
-          navigation.goBack();
+    Alert.alert(
+      'Delete this entry?',
+      'The photo and the description will be removed from this phone.',
+      [
+        { text: 'Keep it', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            await removeEntry(route.params.entryId);
+            navigation.goBack();
+          },
         },
-      },
-    ]);
+      ],
+    );
   }
 
   return (
     <ScrollView contentContainerStyle={styles.content}>
       {entry.photoUri ? (
-        <Image source={{ uri: entry.photoUri }} style={styles.photo} accessibilityIgnoresInvertColors />
+        <Image
+          source={{ uri: entry.photoUri }}
+          style={styles.photo}
+          accessibilityIgnoresInvertColors
+        />
       ) : null}
       <Text style={styles.date}>
         {formatDayLabel(entry.timestamp)} · {formatClock(entry.timestamp)}
@@ -65,7 +73,12 @@ export function EntryDetailScreen({ route, navigation }: RootScreenProps<'EntryD
 const styles = StyleSheet.create({
   content: { padding: spacing.md, gap: spacing.md, paddingBottom: spacing.xl },
   missing: { flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.lg },
-  photo: { width: '100%', aspectRatio: 4 / 3, borderRadius: radius.lg, backgroundColor: colors.line },
+  photo: {
+    width: '100%',
+    aspectRatio: 4 / 3,
+    borderRadius: radius.lg,
+    backgroundColor: colors.line,
+  },
   date: { fontFamily: fonts.body, fontSize: 13, color: colors.inkFaint },
   description: { fontFamily: fonts.heading, fontSize: 22, lineHeight: 32, color: colors.ink },
   body: { fontFamily: fonts.body, fontSize: 15, color: colors.inkSoft },

@@ -31,7 +31,9 @@ export function IntensityPicker({ value, onChange }: IntensityPickerProps) {
         })}
       </View>
       <Text style={styles.caption}>
-        {value === null ? 'Intensity (optional)' : `Intensity ${value} · ${INTENSITY_LABELS[value]}`}
+        {value === null
+          ? 'Intensity (optional)'
+          : `Intensity ${value} · ${INTENSITY_LABELS[value]}`}
       </Text>
     </View>
   );
