@@ -41,7 +41,9 @@ function Tabs() {
         name="Diary"
         component={TimelineScreen}
         options={{
-          tabBarIcon: ({ color, size }) => <Ionicons name="book-outline" color={color} size={size} />,
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="book-outline" color={color} size={size} />
+          ),
         }}
       />
       <Tab.Screen

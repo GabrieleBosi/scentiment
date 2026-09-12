@@ -14,39 +14,42 @@ import { colors, fonts, radius, shadow, spacing } from '../theme';
 
 const SEARCH_DEBOUNCE_MS = 200;
 
+interface SearchResult {
+  query: string;
+  hits: SmellEntry[];
+}
+
 export function TimelineScreen() {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const insets = useSafeAreaInsets();
   const { repo, entries, streak } = useDiary();
   const [query, setQuery] = useState('');
-  const [results, setResults] = useState<SmellEntry[] | null>(null);
+  const [results, setResults] = useState<SearchResult | null>(null);
+  const q = query.trim();
+  const searching = q.length > 0;
 
   // Keyword search runs in SQLite so the list and the DB never disagree.
   useEffect(() => {
-    const q = query.trim();
-    if (q.length === 0) {
-      setResults(null);
-      return;
-    }
+    if (q.length === 0) return;
     let cancelled = false;
     const handle = setTimeout(() => {
       repo
         .search(q)
         .then((hits) => {
-          if (!cancelled) setResults(hits);
+          if (!cancelled) setResults({ query: q, hits });
         })
         .catch(() => {
-          if (!cancelled) setResults([]);
+          if (!cancelled) setResults({ query: q, hits: [] });
         });
     }, SEARCH_DEBOUNCE_MS);
     return () => {
       cancelled = true;
       clearTimeout(handle);
     };
-  }, [query, repo, entries]);
+  }, [q, repo, entries]);
 
-  const data = results ?? entries;
-  const searching = results !== null;
+  // While a new search is pending, keep showing the previous hits.
+  const data = searching ? (results?.hits ?? []) : entries;
 
   return (
     <View style={[styles.screen, { paddingTop: insets.top }]}>
@@ -71,7 +74,11 @@ export function TimelineScreen() {
                 returnKeyType="search"
               />
               {query.length > 0 ? (
-                <Pressable accessibilityLabel="Clear search" onPress={() => setQuery('')} hitSlop={8}>
+                <Pressable
+                  accessibilityLabel="Clear search"
+                  onPress={() => setQuery('')}
+                  hitSlop={8}
+                >
                   <Ionicons name="close-circle" size={18} color={colors.inkFaint} />
                 </Pressable>
               ) : null}
@@ -129,7 +136,12 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm + 2,
   },
   search: { flex: 1, fontFamily: fonts.body, fontSize: 16, color: colors.ink, padding: 0 },
-  empty: { alignItems: 'center', paddingVertical: spacing.xl, paddingHorizontal: spacing.lg, gap: spacing.sm },
+  empty: {
+    alignItems: 'center',
+    paddingVertical: spacing.xl,
+    paddingHorizontal: spacing.lg,
+    gap: spacing.sm,
+  },
   emptyTitle: { fontFamily: fonts.heading, fontSize: 22, color: colors.ink },
   emptyBody: {
     fontFamily: fonts.body,

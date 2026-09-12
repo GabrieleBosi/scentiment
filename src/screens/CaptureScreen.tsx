@@ -70,7 +70,11 @@ export function CaptureScreen({ navigation }: RootScreenProps<'Capture'>) {
         <View style={styles.photoBox}>
           {photoUri ? (
             <>
-              <Image source={{ uri: photoUri }} style={styles.photo} accessibilityIgnoresInvertColors />
+              <Image
+                source={{ uri: photoUri }}
+                style={styles.photo}
+                accessibilityIgnoresInvertColors
+              />
               <Pressable
                 accessibilityLabel="Remove photo"
                 onPress={() => setPhotoUri(null)}
@@ -82,8 +86,16 @@ export function CaptureScreen({ navigation }: RootScreenProps<'Capture'>) {
             </>
           ) : (
             <View style={styles.photoActions}>
-              <PhotoAction icon="camera-outline" label="Take photo" onPress={() => choosePhoto('camera')} />
-              <PhotoAction icon="images-outline" label="Choose photo" onPress={() => choosePhoto('library')} />
+              <PhotoAction
+                icon="camera-outline"
+                label="Take photo"
+                onPress={() => choosePhoto('camera')}
+              />
+              <PhotoAction
+                icon="images-outline"
+                label="Choose photo"
+                onPress={() => choosePhoto('library')}
+              />
             </View>
           )}
         </View>
@@ -105,7 +117,12 @@ export function CaptureScreen({ navigation }: RootScreenProps<'Capture'>) {
         <Text style={styles.sectionLabel}>A few words that fit (optional)</Text>
         <View style={styles.chips}>
           {SUGGESTED_TAGS.map((tag) => (
-            <Chip key={tag} label={tag} selected={tags.includes(tag)} onPress={() => toggleTag(tag)} />
+            <Chip
+              key={tag}
+              label={tag}
+              selected={tags.includes(tag)}
+              onPress={() => toggleTag(tag)}
+            />
           ))}
         </View>
 
@@ -115,7 +132,12 @@ export function CaptureScreen({ navigation }: RootScreenProps<'Capture'>) {
 
         <View style={styles.actions}>
           <Button label="Save" onPress={save} disabled={!canSave} loading={saving} />
-          <Button label="Cancel" variant="secondary" onPress={() => navigation.goBack()} disabled={saving} />
+          <Button
+            label="Cancel"
+            variant="secondary"
+            onPress={() => navigation.goBack()}
+            disabled={saving}
+          />
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -183,7 +205,12 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: colors.ink,
   },
-  sectionLabel: { fontFamily: fonts.body, fontSize: 13, color: colors.inkFaint, marginTop: spacing.sm },
+  sectionLabel: {
+    fontFamily: fonts.body,
+    fontSize: 13,
+    color: colors.inkFaint,
+    marginTop: spacing.sm,
+  },
   chips: { flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm },
   section: { marginTop: spacing.sm },
   actions: { gap: spacing.sm, marginTop: spacing.md },

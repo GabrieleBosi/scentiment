@@ -25,7 +25,10 @@ export function localDayNumber(ms: number): number {
   return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 86_400_000);
 }
 
-export function computeStreak(timestamps: readonly number[], now: number = Date.now()): StreakSummary {
+export function computeStreak(
+  timestamps: readonly number[],
+  now: number = Date.now(),
+): StreakSummary {
   const days = Array.from(new Set(timestamps.map(localDayNumber))).sort((a, b) => b - a);
   const today = localDayNumber(now);
 
@@ -54,7 +57,8 @@ export function computeStreak(timestamps: readonly number[], now: number = Date.
 /** A short, friendly line for the diary header. */
 export function streakMessage(s: StreakSummary): string {
   if (s.totalEntries === 0) return 'Nothing here yet. Your next meal is a good place to start.';
-  if (s.loggedToday && s.currentStreak >= 2) return `${s.currentStreak} days in a row of paying attention.`;
+  if (s.loggedToday && s.currentStreak >= 2)
+    return `${s.currentStreak} days in a row of paying attention.`;
   if (s.loggedToday) return 'Today is noted. Nice.';
   if (s.currentStreak >= 1) return `Yesterday counted. Today's meal is waiting.`;
   return 'Welcome back. No catching up needed.';

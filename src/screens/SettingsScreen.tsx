@@ -3,7 +3,16 @@ import DateTimePicker, {
   type DateTimePickerEvent,
 } from '@react-native-community/datetimepicker';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, Platform, Pressable, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
+import {
+  Alert,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  Switch,
+  Text,
+  View,
+} from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { formatTime } from '../lib/format';
@@ -67,7 +76,11 @@ export function SettingsScreen() {
   function onTimeChange(event: DateTimePickerEvent, date?: Date) {
     setShowIosPicker(false);
     if (event.type !== 'set' || !date) return;
-    void applyReminder({ enabled: reminder.enabled, hour: date.getHours(), minute: date.getMinutes() });
+    void applyReminder({
+      enabled: reminder.enabled,
+      hour: date.getHours(),
+      minute: date.getMinutes(),
+    });
   }
 
   function openTimePicker() {
